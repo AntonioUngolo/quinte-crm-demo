@@ -129,7 +129,7 @@ html.con-finestra body { overflow: hidden; }
   display: flex; align-items: center; gap: 6px; margin-top: 14px; padding: 0 4px;
   font-size: 12px; font-weight: 500; color: var(--gray-500);
 }
-.menu-prodotto .ph-fill { color: var(--brand-500); font-size: 14px; }
+.menu-prodotto-logo { display: block; width: auto; height: 16px; }
 
 .testata-mobile, .cassetto-sfondo { display: none; }
 

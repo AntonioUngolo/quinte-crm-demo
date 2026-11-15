@@ -186,7 +186,9 @@ export function disegnaGuscio(ctx) {
       h('span', { class: 'utente-testi' },
         h('span', { class: 'utente-nome' }, chi.nome),
         h('span', { class: 'utente-ruolo' }, chi.ruolo))),
-    h('p', { class: 'menu-prodotto' }, icona('sparkle', true), h('span', {}, 'Quinte CRM · Demo'))));
+    h('p', { class: 'menu-prodotto' },
+      h('img', { class: 'menu-prodotto-logo', src: 'img/quinte-logo.webp', alt: 'Quinte CRM', width: '63', height: '16' }),
+      h('span', {}, '· Demo'))));
 
   const sfondo = h('div', { class: 'cassetto-sfondo', onClick: () => chiudiCassetto() });
 
