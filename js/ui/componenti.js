@@ -33,7 +33,7 @@ export function intestazione({ titolo, sottotitolo, azioni = [], sopratitolo } =
 
 /**
  * Card bianca. `titolo`: stringa, nodo, null, oppure
- * { titolo, sottotitolo, conteggio, azioni: [nodi], piatto: true (corpo senza padding, per tabelle) }.
+ * { titolo, sottotitolo, conteggio, azioni: [nodi], piatto: true (corpo senza padding, per tabelle), classe }.
  */
 export function card(titolo, ...figli) {
   const o = titolo && typeof titolo === 'object' && !(titolo instanceof Node) ? titolo : { titolo };
@@ -46,7 +46,7 @@ export function card(titolo, ...figli) {
         o.sottotitolo ? h('p', { class: 'card-sotto' }, o.sottotitolo) : null),
       o.azioni && o.azioni.length ? h('div', { class: 'card-azioni' }, o.azioni) : null)
     : null;
-  return h('section', { class: 'card' }, testa,
+  return h('section', { class: ['card', o.classe] }, testa,
     h('div', { class: o.piatto ? 'card-corpo card-corpo--piatto' : 'card-corpo' }, figli));
 }
 

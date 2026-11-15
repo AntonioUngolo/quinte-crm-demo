@@ -4,6 +4,7 @@ import { intestazione, card, campo, statoVuoto } from '../../ui/componenti.js';
 import { creaEvento, modificaEvento, eliminaEvento, trovaEvento } from '../../core/azioni.js';
 import { leggiImporto, euro } from '../../core/numeri.js';
 import { ID_CLIENTE_DEMO } from '../../core/seed.js';
+import { eDataISO } from '../../core/agenda-viste.js';
 
 const MAX_ACCONTI = 6;
 const FASCE = ['Pranzo', 'Cena'];
@@ -97,6 +98,8 @@ export function render(ctx) {
   }
 
   const v = stato0(dati, evento);
+  // Dal calendario («Aggiungi» su uno spazio vuoto) la data arriva già scelta.
+  if (!modifica && eDataISO(ctx.params.data)) v.data = ctx.params.data;
   let errori = {};
   const tornaA = modifica ? `#/eventi/${encodeURIComponent(evento.id)}` : '#/eventi';
 

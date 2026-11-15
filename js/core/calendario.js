@@ -13,22 +13,28 @@ export function vociCalendario(dati, { artistaId = null } = {}) {
     .filter((e) => e.data && e.stato !== 'Cancellato')
     .filter((e) => !artistaId || (e.cast || []).some((c) => c.artistaId === artistaId))
     .map((e) => ({
-      data: e.data, titolo: e.titolo || 'Senza titolo', tipo: 'evento',
+      id: e.id, data: e.data, titolo: e.titolo || 'Senza titolo', tipo: 'evento',
       hash: `#/eventi/${encodeURIComponent(e.id)}`, daUtente: !!e.daUtente,
+      ...(e.fascia ? { fascia: e.fascia } : {}),
     }));
   if (artistaId) return voci;
   for (const a of dati.appuntamenti || []) {
     if (!a.data) continue;
-    voci.push({ data: a.data, titolo: a.titolo || 'Appuntamento', tipo: 'appuntamento', ora: a.ora || '' });
+    const voce = { id: a.id, data: a.data, titolo: a.titolo || 'Appuntamento', tipo: 'appuntamento', ora: a.ora || '' };
+    if (Number(a.durata) > 0) voce.durata = Number(a.durata);
+    if (a.conChi) voce.conChi = a.conChi;
+    voci.push(voce);
   }
   for (const a of dati.agenda || []) {
     if (!a.data) continue;
     const voce = {
-      data: a.data, titolo: a.titolo || (a.tipo === 'Assenza' ? 'Assenza' : 'Impegno'),
+      id: a.id, data: a.data, titolo: a.titolo || (a.tipo === 'Assenza' ? 'Assenza' : 'Impegno'),
       tipo: a.tipo === 'Assenza' ? 'assenza' : 'interno',
     };
     if (a.persona) voce.persona = a.persona;
     if (a.dataFine && a.dataFine > a.data) voce.dataFine = a.dataFine;
+    if (a.ora) voce.ora = a.ora;
+    if (a.oraFine) voce.oraFine = a.oraFine;
     voci.push(voce);
   }
   return voci;

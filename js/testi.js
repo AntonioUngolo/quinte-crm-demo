@@ -10,7 +10,7 @@ export const COSA_STAI_VEDENDO = {
   'evento-scheda': 'La scheda dell\'evento raccoglie tutto in sei sezioni: Panoramica, Cast artistico, Pagamenti, Musica, Allestimento e service, Contratti. Nel cast scegli momento, cachet e dress code e vedi subito il margine stimato.',
   'evento-chat': 'Ogni evento ha la sua chat in tempo reale tra staff e cast, con il contatore dei non letti e le notifiche sul telefono. Qui vedi una conversazione di esempio.',
   archivio: 'Gli eventi completati, sospesi o cancellati restano consultabili. Un evento sospeso si riattiva con il suo motivo, uno cancellato finisce nel cestino e si può ripristinare.',
-  calendario: 'Il calendario dell\'agenzia in vista mese: eventi, appuntamenti, eventi interni e assenze dello staff. Filtri per artista e vedi chi è già impegnato in una data.',
+  calendario: 'Il calendario dell\'agenzia per giorno, settimana o mese: eventi, appuntamenti, eventi interni e assenze dello staff, con le fasce orarie. Tocca uno spazio vuoto per aggiungere, filtra per artista e vedi chi è già impegnato in una data.',
   artisti: 'L\'anagrafica degli artisti, effettivi e occasionali, con i momenti che coprono e il cachet standard. Se attivi la disponibilità, ognuno blocca le date in cui non c\'è.',
   'artista-scheda': 'La scheda dell\'artista: contatti, ruolo, momenti coperti, cachet standard e gli eventi in cui è nel cast.',
   clienti: 'I clienti dell\'agenzia con contatti e provenienza: Instagram, passaparola, location, wedding planner. Da ogni cliente arrivi ai suoi eventi e ai suoi appuntamenti.',

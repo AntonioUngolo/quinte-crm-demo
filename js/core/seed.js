@@ -172,22 +172,22 @@ const SPESE_MANUALI = [
   [60, 'Altro: cancelleria e piccole spese', 'Altro', 55, null],
 ];
 
-// [id, titolo, giorni, ora, tipo, clienteNome, conChi, daRichiamare, esito]
+// [id, titolo, giorni, ora, tipo, clienteNome, conChi, daRichiamare, esito, durata in minuti]
 const APPUNTAMENTI = [
-  ['p1', 'Sopralluogo Villa dei Cedri', 6, '10:30', 'Sopralluogo', 'Francesca Moretti e Andrea Sala', 'Gli sposi', false, ''],
-  ['p2', 'Telefonata di preventivo', 2, '15:00', 'Telefonata', 'Giorgia Pellegrini e Tommaso Riva', 'Giorgia', true, ''],
-  ['p3', 'Incontro per la scaletta musicale', 9, '17:30', 'Incontro', 'Elisa Conti e Marco Testa', 'Elisa e Marco', false, ''],
-  ['p4', 'Richiamare la wedding planner', 1, '11:00', 'Telefonata', 'Beatrice Longo e Pietro Amato', 'Wedding planner', true, ''],
-  ['p5', 'Prova audio in sala', 13, '16:00', 'Sopralluogo', 'Studio Legale Ferri e Associati', 'Referente della location', false, ''],
-  ['p6', 'Conferma data', 3, '12:00', 'Telefonata', 'Famiglia Zanetti', 'Paolo Zanetti', true, ''],
-  ['p7', 'Incontro di presentazione', -4, '18:00', 'Incontro', 'Ilaria Basile e Federico Neri', 'Gli sposi', false, 'Hanno chiesto di tenere la data in opzione'],
-  ['p8', 'Telefonata di ringraziamento', -9, '09:30', 'Telefonata', 'Valentina Orlando e Simone Gatti', 'Valentina', false, 'Contenti, ci consigliano a due amiche'],
+  ['p1', 'Sopralluogo Villa dei Cedri', 6, '10:30', 'Sopralluogo', 'Francesca Moretti e Andrea Sala', 'Gli sposi', false, '', 90],
+  ['p2', 'Telefonata di preventivo', 2, '15:00', 'Telefonata', 'Giorgia Pellegrini e Tommaso Riva', 'Giorgia', true, '', 30],
+  ['p3', 'Incontro per la scaletta musicale', 9, '17:30', 'Incontro', 'Elisa Conti e Marco Testa', 'Elisa e Marco', false, '', 60],
+  ['p4', 'Richiamare la wedding planner', 1, '11:00', 'Telefonata', 'Beatrice Longo e Pietro Amato', 'Wedding planner', true, '', 30],
+  ['p5', 'Prova audio in sala', 13, '16:00', 'Sopralluogo', 'Studio Legale Ferri e Associati', 'Referente della location', false, '', 90],
+  ['p6', 'Conferma data', 3, '12:00', 'Telefonata', 'Famiglia Zanetti', 'Paolo Zanetti', true, '', 30],
+  ['p7', 'Incontro di presentazione', -4, '18:00', 'Incontro', 'Ilaria Basile e Federico Neri', 'Gli sposi', false, 'Hanno chiesto di tenere la data in opzione', 60],
+  ['p8', 'Telefonata di ringraziamento', -9, '09:30', 'Telefonata', 'Valentina Orlando e Simone Gatti', 'Valentina', false, 'Contenti, ci consigliano a due amiche', 30],
 ];
 
-// [id, tipo, titolo, giorni, giorniFine, persona]
+// [id, tipo, titolo, giorni, giorniFine, persona, ora, oraFine]
 const AGENDA = [
-  ['g1', 'Interno', 'Riunione di squadra', 4, 4, 'Tutto lo staff'],
-  ['g2', 'Interno', 'Aggiornamento listino', 12, 12, 'Amministrazione'],
+  ['g1', 'Interno', 'Riunione di squadra', 4, 4, 'Tutto lo staff', '09:30', '11:00'],
+  ['g2', 'Interno', 'Aggiornamento listino', 13, 13, 'Amministrazione', '15:00', '16:30'],
   ['g3', 'Assenza', 'Ferie', 20, 27, 'Matteo Ferrante'],
   ['g4', 'Assenza', 'Impegno personale', 8, 8, 'Paolo Greco'],
 ];
@@ -251,10 +251,10 @@ function costruisciDati(oggi) {
     location: LOCATION.map(([id, nome, citta, indirizzo]) => ({ id, nome, citta, indirizzo })),
     chiese: CHIESE.map(([id, nome, citta, indirizzo]) => ({ id, nome, citta, indirizzo })),
     service: SERVICE.map(([id, nome, referente, telefono]) => ({ id, nome, referente, telefono })),
-    appuntamenti: APPUNTAMENTI.map(([id, titolo, giorni, ora, tipo, clienteNome, conChi, daRichiamare, esito]) => (
-      { id, titolo, data: d(giorni), ora, tipo, clienteNome, conChi, daRichiamare, esito })),
-    agenda: AGENDA.map(([id, tipo, titolo, giorni, fine, persona]) => (
-      { id, tipo, titolo, data: d(giorni), dataFine: d(fine), persona })),
+    appuntamenti: APPUNTAMENTI.map(([id, titolo, giorni, ora, tipo, clienteNome, conChi, daRichiamare, esito, durata]) => (
+      { id, titolo, data: d(giorni), ora, durata, tipo, clienteNome, conChi, daRichiamare, esito })),
+    agenda: AGENDA.map(([id, tipo, titolo, giorni, fine, persona, ora = '', oraFine = '']) => (
+      { id, tipo, titolo, data: d(giorni), dataFine: d(fine), persona, ora, oraFine })),
     spese: creaSpese(oggi, eventi, artisti),
     chat: CHAT.map(([eventoId, messaggi]) => ({
       eventoId,

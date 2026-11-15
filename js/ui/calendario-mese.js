@@ -11,6 +11,7 @@ export const TIPI_VOCE = [
 ];
 const SETTIMANA = [['Lun', 'L'], ['Mar', 'M'], ['Mer', 'M'], ['Gio', 'G'], ['Ven', 'V'], ['Sab', 'S'], ['Dom', 'D']];
 const MAX_VISIBILI = 3;
+const MAX_COMPATTE = 2;
 
 /** Voci che cadono nel giorno `iso` (anche quelle su più giorni). */
 export function vociDelGiorno(voci, iso) {
@@ -35,17 +36,19 @@ function etichettaGiorno(iso, n) {
   return `${formatoLungo(iso)}, ${quante}`;
 }
 
-function vocePillola(v) {
+function vocePillola(v, compatta = false) {
   const classe = `cal-voce cal-voce--${v.tipo}`;
+  if (compatta) return h('span', { class: classe, 'aria-hidden': 'true' }, v.titolo);
   if (v.hash) return h('a', { class: classe, href: v.hash, title: v.titolo }, testoVoce(v));
   return h('span', { class: classe, title: testoVoce(v) }, testoVoce(v));
 }
 
 /**
- * @param {{anno:number, mese:number, voci:Array, giornoScelto?:string, suGiorno?:(iso:string)=>void}} p
+ * @param {{anno:number, mese:number, voci:Array, giornoScelto?:string, suGiorno?:(iso:string)=>void, tuttaCella?:boolean}} p
  *  `mese` da 1 a 12; `voci`: [{data, dataFine?, titolo, tipo, hash?}]
+ *  `tuttaCella` (telefono): blocchi compatti e il tocco su tutta la cella apre il giorno.
  */
-export function calendarioMese({ anno, mese, voci = [], giornoScelto = null, suGiorno = () => {} }) {
+export function calendarioMese({ anno, mese, voci = [], giornoScelto = null, suGiorno = () => {}, tuttaCella = false }) {
   const oggi = oggiISO(new Date());
   const celle = grigliaMese(anno, mese).map(({ iso, delMese }) => {
     const del = vociDelGiorno(voci, iso);
@@ -53,7 +56,8 @@ export function calendarioMese({ anno, mese, voci = [], giornoScelto = null, suG
     const tipi = [...new Set(del.map((v) => v.tipo))];
     return h('div', {
       class: ['cal-cella', !delMese && 'cal-cella--fuori', iso === oggi && 'cal-cella--oggi',
-        iso === giornoScelto && 'cal-cella--scelta'],
+        iso === giornoScelto && 'cal-cella--scelta', tuttaCella && 'cal-cella--tocco'],
+      onClick: tuttaCella ? (e) => { if (!e.target.closest('.cal-num')) suGiorno(iso); } : null,
     },
     h('button', {
       type: 'button', class: 'cal-num', 'data-fuoco': `giorno-${iso}`,
@@ -61,13 +65,16 @@ export function calendarioMese({ anno, mese, voci = [], giornoScelto = null, suG
       'aria-pressed': iso === giornoScelto ? 'true' : 'false',
       onClick: () => suGiorno(iso),
     }, String(numero)),
-    del.length ? h('div', { class: 'cal-voci' },
-      del.slice(0, MAX_VISIBILI).map(vocePillola),
+    del.length && tuttaCella ? h('div', { class: 'cal-voci cal-voci--compatte', 'aria-hidden': 'true' },
+      del.slice(0, MAX_COMPATTE).map((v) => vocePillola(v, true)),
+      del.length > MAX_COMPATTE ? h('span', { class: 'cal-altri' }, `+${del.length - MAX_COMPATTE}`) : null) : null,
+    del.length && !tuttaCella ? h('div', { class: 'cal-voci' },
+      del.slice(0, MAX_VISIBILI).map((v) => vocePillola(v)),
       del.length > MAX_VISIBILI ? h('button', {
         type: 'button', class: 'cal-altri', onClick: () => suGiorno(iso),
         'aria-label': `Mostra le altre ${del.length - MAX_VISIBILI} voci del ${formatoLungo(iso)}`,
       }, `+${del.length - MAX_VISIBILI} altri`) : null) : null,
-    del.length ? h('div', { class: 'cal-punti', 'aria-hidden': 'true' },
+    del.length && !tuttaCella ? h('div', { class: 'cal-punti', 'aria-hidden': 'true' },
       tipi.map((t) => h('span', { class: `cal-punto cal-punto--${t}` }))) : null);
   });
 

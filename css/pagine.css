@@ -221,6 +221,167 @@ a.cal-riga:hover { background: var(--gray-50); }
   .cal-punto { width: 6px; height: 6px; }
 }
 
+/* Calendario: viste Giorno · Settimana · Mese (punto 24.1 dell'app) */
+.cal-barra-sinistra { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+.cal-viste { display: inline-flex; padding: 2px; border: 1px solid var(--gray-200); border-radius: var(--raggio); background: var(--gray-50); }
+.cal-vista {
+  min-height: 36px; padding: 0 14px; border: 0; border-radius: 6px; background: transparent;
+  font: inherit; font-size: 14px; font-weight: 600; color: var(--gray-500); cursor: pointer;
+}
+.cal-vista:hover { color: var(--gray-700); }
+.cal-vista--attiva { background: #FFFFFF; color: var(--gray-900); box-shadow: var(--ombra-sm); }
+.cal-vista:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+.cal-mese { min-width: 220px; }
+.cal-mese::first-letter { text-transform: uppercase; }
+
+.cal-giorno-elenco-testa { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.cal-giorno-elenco-testa .cal-giorno-titolo { margin: 0; }
+button.cal-riga { width: 100%; text-align: left; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; }
+button.cal-riga:hover { background: var(--gray-50); }
+.cal-riga-ora { flex: none; font-size: 13px; color: var(--gray-500); font-weight: 400; }
+
+/* Timeline */
+.tl { --tl-ore: 56px; --tl-alta: 576px; border: 1px solid var(--gray-200); border-radius: var(--raggio); overflow: hidden; background: #FFFFFF; }
+.tl-riga, .tl-griglia { display: grid; grid-template-columns: var(--tl-ore) repeat(var(--tl-colonne), minmax(0, 1fr)); }
+.tl-riga { overflow-y: hidden; scrollbar-gutter: stable; border-bottom: 1px solid var(--gray-200); }
+.tl-angolo, .tl-etichetta { border-right: 1px solid var(--gray-200); }
+.tl-testa {
+  display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; min-width: 0;
+  border: 0; border-right: 1px solid var(--gray-100); background: transparent; font: inherit; cursor: pointer; color: var(--gray-600);
+}
+.tl-testa:hover { background: var(--gray-50); }
+.tl-testa:focus-visible { outline: 2px solid var(--brand-600); outline-offset: -2px; }
+.tl-testa-nome { font-size: 12px; font-weight: 600; text-transform: uppercase; }
+.tl-testa-num { display: inline-grid; place-items: center; min-width: 30px; height: 30px; border-radius: 15px; font-size: 16px; font-weight: 600; color: var(--gray-900); }
+.tl-testa--oggi .tl-testa-nome { color: var(--brand-600); }
+.tl-testa--oggi .tl-testa-num { background: var(--brand-600); color: #FFFFFF; }
+.tl-etichetta { padding: 6px 6px 0 0; font-size: 11px; line-height: 1.2; color: var(--gray-500); text-align: right; }
+.tl-tutto-cella { display: flex; flex-direction: column; gap: 3px; padding: 4px; min-width: 0; min-height: 32px; border-right: 1px solid var(--gray-100); }
+.tl-chip { width: 100%; border: 0; text-align: left; font: inherit; font-size: 12px; font-weight: 500; cursor: pointer; }
+.tl-piu { align-self: flex-start; border: 0; background: transparent; padding: 2px 4px; font: inherit; font-size: 12px; font-weight: 600; color: var(--brand-600); cursor: pointer; }
+.tl-piu:hover { text-decoration: underline; }
+.tl-chip:focus-visible, .tl-piu:focus-visible, .tl-blocco:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 1px; }
+
+.tl-corpo { height: var(--tl-alta); overflow-y: auto; scrollbar-gutter: stable; overscroll-behavior: contain; }
+.tl-corpo:focus-visible { outline: 2px solid var(--brand-600); outline-offset: -2px; }
+.tl-griglia { position: relative; }
+.tl-ore { position: relative; border-right: 1px solid var(--gray-200); }
+.tl-ora { position: absolute; right: 8px; transform: translateY(-50%); font-size: 11px; color: var(--gray-500); font-variant-numeric: tabular-nums; }
+.tl-colonna {
+  position: relative; min-width: 0; border-right: 1px solid var(--gray-100);
+  background-image: repeating-linear-gradient(to bottom, var(--gray-100) 0 1px, transparent 1px 48px);
+}
+.tl-colonna--tocco { cursor: cell; }
+.tl-colonna--oggi { background-color: var(--brand-25); }
+.tl-blocco {
+  position: absolute; display: flex; flex-direction: column; gap: 1px; padding: 3px 6px; overflow: hidden;
+  border: 0; border-left: 3px solid; border-radius: 4px; text-align: left; font: inherit; cursor: pointer; z-index: 1;
+}
+.tl-blocco--basso { flex-direction: row; align-items: baseline; gap: 6px; padding-top: 1px; padding-bottom: 1px; }
+.tl-blocco-titolo { font-size: 12px; font-weight: 600; line-height: 1.3; overflow: hidden; overflow-wrap: anywhere; min-width: 0; }
+.tl-blocco--basso .tl-blocco-titolo { white-space: nowrap; text-overflow: ellipsis; }
+.tl-blocco--basso .tl-blocco-ora { display: none; }
+.tl-blocco-ora { font-size: 11px; line-height: 1.3; opacity: 0.85; white-space: nowrap; }
+.tl-blocco--appuntamento { background: #EFF8FF; color: #175CD3; border-color: var(--blue-500); }
+.tl-blocco--interno { background: var(--gray-100); color: var(--gray-700); border-color: var(--gray-400); }
+.tl-blocco--assenza { background: var(--error-50); color: var(--error-700); border-color: var(--error-500); }
+.tl-blocco--evento { background: var(--brand-50); color: var(--brand-700); border-color: var(--brand-500); }
+.tl-blocco:hover { filter: brightness(0.97); }
+.tl-scelta { box-shadow: 0 0 0 2px var(--brand-600); }
+.tl-adesso { position: absolute; left: 0; right: 0; height: 2px; background: var(--error-500); z-index: 2; pointer-events: none; }
+.tl-adesso::before { content: ''; position: absolute; left: -5px; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--error-500); }
+
+/* Giorno da computer: timeline e colonna destra */
+.cal-giorno-desktop { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 20px; align-items: start; }
+.cal-giorno-lato { display: flex; flex-direction: column; gap: 16px; }
+.mini-mese { border: 1px solid var(--gray-200); border-radius: var(--raggio); padding: 8px 10px 10px; }
+.mini-mese-testa { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.mini-mese-titolo { font-size: 14px; font-weight: 600; color: var(--gray-900); }
+.mini-mese-griglia { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; text-align: center; }
+.mini-mese-nome { font-size: 11px; font-weight: 600; color: var(--gray-500); padding: 2px 0; }
+.mini-giorno {
+  position: relative; height: 32px; border: 0; border-radius: 16px; background: transparent;
+  font: inherit; font-size: 13px; color: var(--gray-700); cursor: pointer;
+}
+.mini-giorno:hover { background: var(--gray-100); }
+.mini-giorno:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 1px; }
+.mini-giorno--fuori { color: var(--gray-400); }
+.mini-giorno--pieno::after { content: ''; position: absolute; left: 50%; bottom: 3px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--gray-400); }
+.mini-giorno--oggi { color: var(--brand-600); font-weight: 700; }
+.mini-giorno--scelto { background: var(--brand-600); color: #FFFFFF; font-weight: 600; }
+.mini-giorno--scelto:hover { background: var(--brand-700); }
+.mini-giorno--scelto::after { background: #FFFFFF; }
+.cal-anteprima { border: 1px solid var(--gray-200); border-radius: var(--raggio); padding: 14px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.cal-anteprima--vuota p { margin: 0; font-size: 14px; color: var(--gray-500); }
+.cal-anteprima-titolo { margin: 0; font-size: 16px; font-weight: 600; color: var(--gray-900); }
+.cal-anteprima-ora, .cal-anteprima-extra { margin: 0; font-size: 14px; color: var(--gray-600); }
+.cal-anteprima .btn { margin-top: 6px; }
+.cal-dettaglio-tipo { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--gray-600); }
+.cal-dettaglio { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.cal-dettaglio-riga { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; font-size: 14px; }
+.cal-dettaglio-riga dt { color: var(--gray-500); }
+.cal-dettaglio-riga dd { margin: 0; color: var(--gray-900); }
+.finestra--aggiungi .finestra-azioni { flex-wrap: wrap; }
+
+@media (max-width: 1100px) {
+  .cal-giorno-desktop { grid-template-columns: minmax(0, 1fr); }
+  .cal-giorno-lato { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+}
+
+/* Giorno da telefono */
+.cal-giorno-telefono { scroll-margin-top: 64px; }
+.cal-torna-mese { display: inline-flex; align-items: center; gap: 2px; font-weight: 600; margin-bottom: 8px; }
+.striscia { display: flex; align-items: center; gap: 2px; margin: 0 -6px 8px; touch-action: pan-y; }
+.striscia-freccia { flex: none; }
+.striscia-giorni { flex: 1; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; }
+.striscia-giorno {
+  display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 0 2px; border: 0; border-radius: var(--raggio);
+  background: transparent; font: inherit; cursor: pointer; color: var(--gray-500); min-width: 0;
+}
+.striscia-giorno:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 1px; }
+.striscia-nome { font-size: 11px; font-weight: 600; }
+.striscia-num { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 17px; font-size: 16px; font-weight: 600; color: var(--gray-900); }
+.striscia-giorno--oggi .striscia-num { color: var(--brand-600); }
+.striscia-giorno--scelto .striscia-num { background: var(--gray-900); color: #FFFFFF; }
+.striscia-giorno--scelto.striscia-giorno--oggi .striscia-num { background: var(--brand-600); }
+.striscia-punto { width: 5px; height: 5px; border-radius: 50%; }
+.striscia-punto--pieno { background: var(--gray-400); }
+.cal-giorno-titolo--telefono { margin: 0 0 10px; font-size: 15px; }
+.tl--telefono { --tl-ore: 48px; --tl-alta: max(360px, calc(100dvh - 330px)); }
+
+/* Settimana da telefono: lista per giorno */
+.sett-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.sett-giorno { border-bottom: 1px solid var(--gray-200); padding: 10px 0; }
+.sett-giorno:first-child { padding-top: 0; }
+.sett-testa {
+  display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 36px; padding: 0;
+  border: 0; background: transparent; font: inherit; font-size: 15px; font-weight: 600; color: var(--gray-900); text-align: left; cursor: pointer;
+}
+.sett-testa:focus-visible, .sett-voce:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+.sett-giorno--oggi .sett-testa { color: var(--brand-600); }
+.sett-oggi { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: var(--brand-50); color: var(--brand-700); }
+.sett-voci { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.sett-voce {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 6px 10px; border: 0; border-radius: var(--raggio);
+  background: var(--gray-50); font: inherit; font-size: 14px; color: var(--gray-900); text-align: left; cursor: pointer;
+}
+.sett-voce-titolo { flex: 1; min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
+.sett-voce-ora { flex: none; font-size: 13px; color: var(--gray-500); }
+.sett-vuoto { margin: 2px 0 0; font-size: 14px; color: var(--gray-400); }
+
+@media (max-width: 767.98px) {
+  .cal-barra-sinistra { flex-direction: column; align-items: stretch; }
+  .cal-viste { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cal-mese { min-width: 0; font-size: 16px; }
+  .pagina-calendario .card-corpo { padding-left: 12px; padding-right: 12px; }
+  /* Mese da telefono: blocchi colorati compatti e tocco su tutta la cella */
+  .cal-cella--tocco { cursor: pointer; min-height: 64px; justify-content: flex-start; }
+  .cal-voci.cal-voci--compatte { display: flex; width: 100%; gap: 2px; }
+  .cal-voci--compatte .cal-voce { padding: 0 2px; border-left-width: 2px; border-radius: 2px; font-size: 9px; line-height: 13px; }
+  .cal-voci--compatte .cal-altri { padding: 0 2px; font-size: 10px; line-height: 12px; }
+  .cal-cella--tocco .cal-num { min-width: 28px; height: 26px; font-size: 13px; }
+}
+
 /* Finanze & Spese */
 .filtro-select { flex: 0 1 auto; width: auto; min-width: 140px; }
 .filtri .filtro-select { max-width: 100%; }
